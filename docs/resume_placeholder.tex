@@ -1,0 +1,100 @@
+\documentclass[11pt]{article}
+
+\usepackage[margin=0.65in]{geometry}
+\usepackage[hidelinks]{hyperref}
+\usepackage{enumitem}
+\usepackage{tabularx}
+\usepackage{array}
+\usepackage{xcolor}
+\usepackage{titlesec}
+
+\pagestyle{empty}
+\setlength{\parindent}{0pt}
+\setlist[itemize]{leftmargin=1.2em, topsep=2pt, itemsep=2pt}
+\titleformat{\section}{\large\bfseries}{}{0em}{}[\titlerule]
+
+\newcommand{\resumeSubheading}[4]{
+  \begin{tabularx}{\textwidth}{Xr}
+    \textbf{#1} & #2 \\
+    \textit{#3} & \textit{#4} \\
+  \end{tabularx}
+}
+
+\newcommand{\resumeProject}[3]{
+  \begin{tabularx}{\textwidth}{Xr}
+    \textbf{#1} & #2 \\
+    \textit{#3} & \\
+  \end{tabularx}
+}
+
+\begin{document}
+
+\begin{center}
+    {\LARGE \textbf{[YOUR NAME]}} \\
+    \vspace{4pt}
+    [City, Province] \textbar\ [Phone Number] \textbar\ \href{mailto:[email@example.com]}{[email@example.com]} \textbar\ \href{https://github.com/[github]}{github.com/[github]} \\
+    \vspace{2pt}
+    \href{https://www.linkedin.com/in/[linkedin]}{linkedin.com/in/[linkedin]} \textbar\ [Portfolio or Blog URL]
+\end{center}
+
+\section*{Summary}
+Backend-leaning software engineer with hands-on experience building full-stack web applications, enterprise collaboration systems, and production-style CRUD/reporting workflows. Comfortable shipping across Java/Spring Boot, MySQL, Redis, React, Docker, and REST API layers, with particular interest in backend architecture, data modeling, and turning product requirements into maintainable end-to-end features.
+
+\section*{Education}
+\resumeSubheading
+  {[UNIVERSITY NAME]}{[City, Country]}
+  {[B.S./M.S. in Computer Science or Related Field]}{[Start Date] -- [Expected Graduation Date]}
+\begin{itemize}
+  \item Relevant coursework: Data Structures, Databases, Operating Systems, Computer Networks, Software Engineering.
+  \item GPA / Rank / Awards: [Placeholder].
+\end{itemize}
+
+\section*{Technical Skills}
+\begin{itemize}
+  \item \textbf{Languages:} Java, JavaScript, SQL, HTML/CSS
+  \item \textbf{Backend:} Spring Boot, Spring Security, JPA/Hibernate, MyBatis-Plus, REST API design, session auth, JWT auth
+  \item \textbf{Frontend:} React, Vite, Axios, responsive UI implementation, static HTML/JS admin pages
+  \item \textbf{Data \& Infra:} MySQL, Redis, Docker, Docker Compose, Nginx, Maven
+  \item \textbf{Other:} WebSocket, EasyExcel, API debugging, CRUD workflow design, deployment troubleshooting
+\end{itemize}
+
+\section*{Projects}
+\resumeProject
+  {Nunchi Forum Platform}{[Month Year] -- [Month Year]}
+  {Spring Boot, Spring Security, JWT, JPA/Hibernate, MySQL, React, Vite, Docker, Nginx}
+\begin{itemize}
+  \item Built a containerized full-stack discussion platform with user registration/login, post publishing, comments, search, image upload, and responsive multi-page frontend flows.
+  \item Designed and implemented REST APIs for auth, posts, comments, categories, and uploads; modeled relational entities for users, posts, comments, and forum taxonomy.
+  \item Delivered a React frontend with a custom editorial-style UI, feed/detail/search pages, protected compose flow, auth context management, and same-origin API integration through Axios.
+  \item Diagnosed and fixed deployment issues across Docker Compose and Nginx reverse proxy configuration, including internal service port mismatches between frontend proxy and backend containers.
+  \item Improved product UX by changing post categorization from a blocking requirement to an optional topic model, with backend fallback handling that preserved database consistency without forcing users to pre-create categories.
+\end{itemize}
+
+\resumeProject
+  {ZHTJ Collaboration \& Community Management Platform}{[Month Year] -- [Month Year]}
+  {Spring Boot, MyBatis-Plus, MySQL, Redis, WebSocket, EasyExcel, static HTML/JS}
+\begin{itemize}
+  \item Developed a multi-module internal platform covering user management, department information, article publishing, task coordination, meeting management, follow relationships, and data reporting.
+  \item Implemented paginated query and detail workflows for tasks, articles, meetings, and users, including status filtering, join/participation logic, session-based login checks, and dynamic activity updates.
+  \item Added Redis-backed caching for profile/article visit counters and follow-state lookups, then synchronized cached counters back to MySQL with scheduled background jobs to reduce repeated database reads.
+  \item Integrated WebSocket-assisted WeChat QR login flow to notify the frontend when scan-based authentication completed, combining HTTP callbacks with server-pushed login status updates.
+  \item Built reporting and export features with EasyExcel, including multi-sheet Excel generation for users, departments, tasks, meetings, and articles, plus summary aggregation endpoints for dashboard-style analytics.
+\end{itemize}
+
+\section*{Experience}
+\resumeSubheading
+  {[Company / Lab / Team Name]}{[City, Country]}
+  {[Role Title]}{[Start Date] -- [End Date or Present]}
+\begin{itemize}
+  \item [Placeholder: describe internship / lab / assistantship work].
+  \item [Placeholder: quantify impact, ownership, or technologies used].
+\end{itemize}
+
+\section*{Additional Information}
+\begin{itemize}
+  \item Languages: [Chinese / English / Other, Placeholder]
+  \item Certifications: [Placeholder]
+  \item Open-source / competitions / awards: [Placeholder]
+\end{itemize}
+
+\end{document}

@@ -11,6 +11,9 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class CategoryService {
+    private static final String DEFAULT_CATEGORY_NAME = "General";
+    private static final String DEFAULT_CATEGORY_SLUG = "general";
+
     private final CategoryRepository categoryRepository;
 
     public List<CategoryDTO> getAllCategories() {
@@ -22,6 +25,15 @@ public class CategoryService {
     public Category getCategoryById(Long id) {
         return categoryRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Category not found"));
+    }
+
+    public Category getOrCreateDefaultCategory() {
+        return categoryRepository.findBySlug(DEFAULT_CATEGORY_SLUG)
+                .orElseGet(() -> categoryRepository.save(Category.builder()
+                        .name(DEFAULT_CATEGORY_NAME)
+                        .description("Default topic for posts that do not need a dedicated category.")
+                        .slug(DEFAULT_CATEGORY_SLUG)
+                        .build()));
     }
 
     public CategoryDTO createCategory(String name, String description) {

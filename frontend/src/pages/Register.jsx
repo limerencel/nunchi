@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 
 const Register = () => {
@@ -21,25 +21,67 @@ const Register = () => {
   };
 
   return (
-    <div style={{ maxWidth: '400px', margin: '2rem auto', padding: '1rem', border: '1px solid #ddd', borderRadius: '8px' }}>
-      <h2>Register</h2>
-      {error && <p style={{ color: 'red' }}>{error}</p>}
-      <form onSubmit={handleSubmit}>
-        <div style={{ marginBottom: '1rem' }}>
-          <label>Username</label>
-          <input type="text" value={username} onChange={(e) => setUsername(e.target.value)} required style={{ width: '100%', padding: '0.5rem' }} />
+    <section className="page-shell page-shell--wide auth-shell">
+      <div className="auth-panel">
+        <div className="auth-copy">
+          <p className="eyebrow">Join</p>
+          <h1 className="feed-heading">Start reading with an account.</h1>
+          <p className="feed-subtitle">
+            Create a profile to publish threads, track discussions, and move from observer to participant.
+          </p>
         </div>
-        <div style={{ marginBottom: '1rem' }}>
-          <label>Email</label>
-          <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required style={{ width: '100%', padding: '0.5rem' }} />
-        </div>
-        <div style={{ marginBottom: '1rem' }}>
-          <label>Password</label>
-          <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} required style={{ width: '100%', padding: '0.5rem' }} />
-        </div>
-        <button type="submit" style={{ width: '100%', padding: '0.75rem', background: '#007bff', color: '#fff', border: 'none', borderRadius: '4px' }}>Register</button>
-      </form>
-    </div>
+
+        <form onSubmit={handleSubmit} className="auth-form">
+          {error && <p className="error-message" role="alert">{error}</p>}
+
+          <div className="field-group">
+            <label className="field-label" htmlFor="register-username">Username</label>
+            <input
+              id="register-username"
+              type="text"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              required
+              autoComplete="username"
+              className="field-control"
+            />
+          </div>
+
+          <div className="field-group">
+            <label className="field-label" htmlFor="register-email">Email</label>
+            <input
+              id="register-email"
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+              autoComplete="email"
+              className="field-control"
+            />
+          </div>
+
+          <div className="field-group">
+            <label className="field-label" htmlFor="register-password">Password</label>
+            <input
+              id="register-password"
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+              autoComplete="new-password"
+              className="field-control"
+            />
+          </div>
+
+          <div className="submit-row submit-row-stacked">
+            <button type="submit" className="btn-primary">Create account</button>
+            <p className="helper-copy">
+              Already registered? <Link to="/login" className="inline-link">Log in</Link>
+            </p>
+          </div>
+        </form>
+      </div>
+    </section>
   );
 };
 

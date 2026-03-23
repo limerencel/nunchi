@@ -44,7 +44,9 @@ public class PostService {
     @Transactional
     public PostDTO createPost(CreatePostRequest request, String username) {
         User user = authService.getUserByUsername(username);
-        Category category = categoryService.getCategoryById(request.getCategoryId());
+        Category category = request.getCategoryId() != null
+                ? categoryService.getCategoryById(request.getCategoryId())
+                : categoryService.getOrCreateDefaultCategory();
 
         Post post = Post.builder()
                 .title(request.getTitle())

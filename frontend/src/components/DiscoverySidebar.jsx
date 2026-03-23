@@ -1,39 +1,57 @@
-import React from 'react';
+import { useEffect, useState } from 'react';
+import { Compass, Sparkles } from 'lucide-react';
+import { categoryAPI } from '../services/api';
 
 const DiscoverySidebar = () => {
+  const [categories, setCategories] = useState([]);
+
+  useEffect(() => {
+    categoryAPI
+      .getAll()
+      .then((response) => setCategories(response.data))
+      .catch(() => setCategories([]));
+  }, []);
+
+  const featuredCategories = categories.slice(0, 4);
+
   return (
-    <aside className="right-sidebar" style={{ padding: '2rem 1.5rem', position: 'sticky', top: 0, height: '100vh' }}>
-      <div style={{
-        background: 'var(--surface)',
-        borderRadius: '16px',
-        padding: '1.25rem',
-        marginBottom: '1.5rem'
-      }}>
-        <h2 style={{ fontSize: '1.25rem', fontWeight: 700, marginBottom: '1rem' }}>Discovery</h2>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-          <div style={{ cursor: 'pointer' }}>
-            <span style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>Trending in Tech</span>
-            <p style={{ fontWeight: 600, margin: '2px 0' }}>The Future of AI Design</p>
-            <span style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>1,234 posts</span>
-          </div>
-          <div style={{ cursor: 'pointer' }}>
-            <span style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>Philosophy</span>
-            <p style={{ fontWeight: 600, margin: '2px 0' }}>Digital Minimalism</p>
-            <span style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>856 posts</span>
-          </div>
-          <div style={{ cursor: 'pointer' }}>
-            <span style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>Development</span>
-            <p style={{ fontWeight: 600, margin: '2px 0' }}>React 19 RC</p>
-            <span style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>2,109 posts</span>
-          </div>
+    <aside className="discovery-sidebar right-sidebar">
+      <div className="sidebar-panel sidebar-panel-featured">
+        <div className="sidebar-icon-row">
+          <Compass size={16} strokeWidth={1.7} />
+          <span>Discovery</span>
+        </div>
+        <h2 className="sidebar-section-title">Quiet signals worth opening.</h2>
+        <p className="sidebar-note">
+          Read slowly, skim the metadata, then dive into the thread with the strongest point of view.
+        </p>
+      </div>
+
+      <div className="sidebar-panel">
+        <div className="sidebar-icon-row">
+          <Sparkles size={16} strokeWidth={1.7} />
+          <span>Categories</span>
+        </div>
+        <div className="sidebar-stack">
+          {featuredCategories.length > 0 ? (
+            featuredCategories.map((category) => (
+              <div key={category.id} className="sidebar-topic">
+                <p className="sidebar-topic-name">{category.name}</p>
+                <p className="sidebar-topic-description">
+                  {category.description || 'A thread category for closer observation.'}
+                </p>
+              </div>
+            ))
+          ) : (
+            <p className="sidebar-note">Categories will appear here once the API responds.</p>
+          )}
         </div>
       </div>
 
-      <div style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
-        <a href="#" style={{ textDecoration: 'none' }}>Terms of Service</a>
-        <a href="#" style={{ textDecoration: 'none' }}>Privacy Policy</a>
-        <a href="#" style={{ textDecoration: 'none' }}>Cookie Policy</a>
-        <span>© 2026 nunchi.</span>
+      <div className="sidebar-footer">
+        <span>Read the room.</span>
+        <span>Write with intent.</span>
+        <span>© 2026 nunchi</span>
       </div>
     </aside>
   );

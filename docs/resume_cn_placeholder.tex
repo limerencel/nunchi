@@ -1,0 +1,99 @@
+\documentclass[11pt,a4paper]{ctexart}
+
+\usepackage[a4paper,margin=1.6cm]{geometry}
+\usepackage[hidelinks]{hyperref}
+\usepackage{enumitem}
+\usepackage{tabularx}
+\usepackage{array}
+\usepackage{titlesec}
+
+\pagestyle{empty}
+\setlength{\parindent}{0pt}
+\setlist[itemize]{leftmargin=1.4em, topsep=2pt, itemsep=2pt}
+\titleformat{\section}{\Large\bfseries}{}{0em}{}[\titlerule]
+
+\newcommand{\resumeSubheading}[4]{
+  \begin{tabularx}{\textwidth}{Xr}
+    \textbf{#1} & #2 \\
+    #3 & #4 \\
+  \end{tabularx}
+}
+
+\newcommand{\resumeProject}[3]{
+  \begin{tabularx}{\textwidth}{Xr}
+    \textbf{#1} & #2 \\
+    \textit{#3} & \\
+  \end{tabularx}
+}
+
+\begin{document}
+
+\begin{center}
+    {\zihao{2}\textbf{[你的姓名]}} \\
+    \vspace{4pt}
+    [城市] \quad|\quad [手机号] \quad|\quad \href{mailto:[邮箱地址]}{[邮箱地址]} \quad|\quad \href{https://github.com/[github用户名]}{GitHub} \\
+    \vspace{2pt}
+    \href{https://www.linkedin.com/in/[linkedin用户名]}{LinkedIn} \quad|\quad [个人主页 / 博客，可选]
+\end{center}
+
+\section*{个人简介}
+面向 Java 后端 / 全栈方向的开发者，具备从需求分析、接口设计、数据建模到前后端联调和部署排障的完整项目实践经验。熟悉 Spring Boot、MySQL、Redis、React、Docker 等技术栈，能够独立完成中小型 Web 系统的核心功能开发，并持续优化产品体验与系统可维护性。
+
+\section*{教育背景}
+\resumeSubheading
+  {[学校名称]}{[起止时间]}
+  {[专业名称] / 本科或硕士]}{[城市]}
+\begin{itemize}
+  \item GPA / 排名：[待填写]
+  \item 主修课程：数据结构、数据库系统、操作系统、计算机网络、软件工程等
+\end{itemize}
+
+\section*{专业技能}
+\begin{itemize}
+  \item \textbf{编程语言：} Java、JavaScript、SQL、HTML/CSS
+  \item \textbf{后端开发：} Spring Boot、Spring Security、JPA/Hibernate、MyBatis-Plus、RESTful API 设计、Session/JWT 鉴权
+  \item \textbf{前端开发：} React、Vite、Axios、响应式页面开发、静态页面与后台管理页面实现
+  \item \textbf{数据与中间件：} MySQL、Redis、Nginx、Docker、Docker Compose、Maven
+  \item \textbf{其他能力：} WebSocket、EasyExcel、接口联调、部署排障、基础数据建模与业务流程抽象
+\end{itemize}
+
+\section*{项目经历}
+\resumeProject
+  {Nunchi Forum 论坛系统}{[时间待填写]}
+  {Spring Boot + Spring Security + JWT + JPA/Hibernate + MySQL + React + Vite + Docker + Nginx}
+\begin{itemize}
+  \item 独立完成一个全栈论坛系统的设计与开发，覆盖用户注册登录、帖子发布、评论互动、搜索、图片上传、帖子详情页与响应式前端界面。
+  \item 基于 Spring Boot 设计认证、帖子、评论、分类、图片上传等 REST API，完成用户、帖子、评论、分类等核心实体的关系建模与持久化实现。
+  \item 使用 React + Vite 实现首页信息流、搜索页、帖子详情页、登录注册页、发帖页等前端页面，并封装鉴权上下文与统一 API 调用层。
+  \item 基于 Docker Compose 搭建 MySQL、后端服务与前端 Nginx 反向代理部署链路，定位并修复前后端容器间代理端口不一致导致的注册失败问题。
+  \item 优化发帖产品逻辑，将“必须先创建分类才能发帖”改为“主题可选”，后端通过默认分类兜底，降低用户使用门槛并保持数据结构稳定。
+\end{itemize}
+
+\resumeProject
+  {ZHTJ 协同管理与内容平台}{[时间待填写]}
+  {Spring Boot + MyBatis-Plus + MySQL + Redis + WebSocket + EasyExcel + 静态 HTML/JS}
+\begin{itemize}
+  \item 参与并梳理一个企业内部协同平台的后端能力，系统涵盖用户管理、部门管理、任务协作、会议管理、文章发布、关注关系、报表统计与导出等模块。
+  \item 实现任务、会议、文章、用户等模块的分页查询、详情展示、状态筛选与写操作接口，覆盖任务参与、会议报名、文章收藏、用户关注等典型业务流程。
+  \item 引入 Redis 缓存用户访问量、文章浏览量与关注状态，减少重复数据库查询，并通过定时任务将缓存计数回写 MySQL。
+  \item 集成微信扫码登录能力，结合 WebSocket 在扫码登录完成后向前端推送结果，形成“扫码授权 + 服务端回调 + 页面通知”的闭环交互。
+  \item 基于 EasyExcel 实现多 Sheet Excel 导出与综合报表接口，支持用户、部门、任务、会议、文章等多维数据汇总输出。
+\end{itemize}
+
+\section*{实习 / 校园经历}
+\resumeSubheading
+  {[公司 / 实验室 / 团队名称]}{[起止时间]}
+  {[岗位名称]}{[城市]}
+\begin{itemize}
+  \item [占位：描述你的实习、实验室、工作室或项目组经历]
+  \item [占位：补充技术栈、职责边界、结果或量化影响]
+\end{itemize}
+
+\section*{附加信息}
+\begin{itemize}
+  \item 语言能力：[如 CET-4 / CET-6 / 英语口语 / 普通话等，待填写]
+  \item 奖项证书：[待填写]
+  \item 开源 / 比赛 / 荣誉：[待填写]
+\end{itemize}
+
+\end{document}

@@ -1,7 +1,7 @@
-import { useState, useEffect } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { postAPI, categoryAPI } from '../services/api';
 import PostCard from '../components/PostCard';
-import { motion } from 'framer-motion';
+import { motion as Motion } from 'framer-motion';
 
 const Home = () => {
   const [posts, setPosts] = useState([]);
@@ -9,25 +9,55 @@ const Home = () => {
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [page, setPage] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
+  const [refreshKey, setRefreshKey] = useState(0);
 
   useEffect(() => {
-    categoryAPI.getAll().then((res) => setCategories(res.data));
+    categoryAPI
+      .getAll()
+      .then((res) => setCategories(res.data))
+      .catch(() => setCategories([]));
   }, []);
 
   useEffect(() => {
-    loadPosts();
-  }, [selectedCategory, page]);
+    let cancelled = false;
 
-  const loadPosts = () => {
-    const fetchPosts = selectedCategory
+    const request = selectedCategory
       ? postAPI.getByCategory(selectedCategory, page)
       : postAPI.getAll(page);
-    
-    fetchPosts.then((res) => {
-      setPosts(res.data.content);
-      setTotalPages(res.data.totalPages);
-    });
-  };
+
+    request
+      .then((res) => {
+        if (cancelled) {
+          return;
+        }
+
+        setPosts((currentPosts) =>
+          page === 0 ? res.data.content : [...currentPosts, ...res.data.content.filter((item) => !currentPosts.some((post) => post.id === item.id))],
+        );
+        setTotalPages(res.data.totalPages);
+      })
+      .catch(() => {
+        if (!cancelled) {
+          setError('The feed could not be loaded right now.');
+        }
+      })
+      .finally(() => {
+        if (!cancelled) {
+          setLoading(false);
+        }
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [selectedCategory, page, refreshKey]);
+
+  const activeCategory = useMemo(
+    () => categories.find((category) => category.id === selectedCategory),
+    [categories, selectedCategory],
+  );
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -43,49 +73,40 @@ const Home = () => {
   };
 
   return (
-    <div style={{ width: '100%', maxWidth: '600px', margin: '0 auto' }}>
-      {/* Category Tabs */}
-      <div style={{ 
-        position: 'sticky', 
-        top: 0, 
-        background: 'rgba(255,255,255,0.8)', // This needs to be themable, but for now we'll stick to a solid color or backdrop filter
-        backdropFilter: 'blur(12px)',
-        zIndex: 10,
-        borderBottom: '1px solid var(--divider)',
-        padding: '0 1rem'
-      }}
-      className="tabs-container"
-      >
-        <div style={{ 
-          display: 'flex', 
-          gap: '2rem', 
-          overflowX: 'auto',
-          scrollbarWidth: 'none',
-          msOverflowStyle: 'none'
-        }}>
+    <section className="page-shell">
+      <header className="feed-header">
+        <p className="eyebrow">The art of observation</p>
+        <h1 className="feed-heading">{activeCategory?.name || 'For you'}</h1>
+        <p className="feed-subtitle">
+          {activeCategory?.description || 'A clean feed of conversations that reward a second look.'}
+        </p>
+      </header>
+
+      <div className="tabs-shell">
+        <div className="category-tabs">
           <button
-            onClick={() => { setSelectedCategory(null); setPage(0); }}
-            style={{ 
-              padding: '1rem 0', 
-              fontWeight: !selectedCategory ? 700 : 500,
-              color: !selectedCategory ? 'var(--text-primary)' : 'var(--text-secondary)',
-              borderBottom: !selectedCategory ? '3px solid var(--accent)' : '3px solid transparent',
-              whiteSpace: 'nowrap'
+            onClick={() => {
+              setLoading(true);
+              setError('');
+              setSelectedCategory(null);
+              setPage(0);
             }}
+            className="category-tab"
+            data-active={!selectedCategory}
           >
             For You
           </button>
           {categories.map((cat) => (
             <button
               key={cat.id}
-              onClick={() => { setSelectedCategory(cat.id); setPage(0); }}
-              style={{ 
-                padding: '1rem 0', 
-                fontWeight: selectedCategory === cat.id ? 700 : 500,
-                color: selectedCategory === cat.id ? 'var(--text-primary)' : 'var(--text-secondary)',
-                borderBottom: selectedCategory === cat.id ? '3px solid var(--accent)' : '3px solid transparent',
-                whiteSpace: 'nowrap'
+              onClick={() => {
+                setLoading(true);
+                setError('');
+                setSelectedCategory(cat.id);
+                setPage(0);
               }}
+              className="category-tab"
+              data-active={selectedCategory === cat.id}
             >
               {cat.name}
             </button>
@@ -93,37 +114,64 @@ const Home = () => {
         </div>
       </div>
 
-      {/* Feed */}
-      {posts.length === 0 ? (
-        <div style={{ padding: '2rem', textAlign: 'center', color: 'var(--text-secondary)' }}>
-          No posts found.
+      {error ? (
+        <div className="empty-state">
+          <h2 className="empty-state-title">Feed unavailable</h2>
+          <p className="empty-state-body">{error}</p>
+          <button
+            className="text-button"
+            onClick={() => {
+              setLoading(true);
+              setError('');
+              setRefreshKey((value) => value + 1);
+            }}
+            type="button"
+          >
+            Try again
+          </button>
+        </div>
+      ) : loading && posts.length === 0 ? (
+        <div className="empty-state">
+          <h2 className="empty-state-title">Loading threads</h2>
+          <p className="empty-state-body">Pulling the latest posts into the reading column.</p>
+        </div>
+      ) : posts.length === 0 ? (
+        <div className="empty-state">
+          <h2 className="empty-state-title">Nothing here yet</h2>
+          <p className="empty-state-body">Switch categories or be the first person to start the thread.</p>
         </div>
       ) : (
-        <motion.div 
+        <Motion.div
+          className="feed-stack"
           variants={containerVariants}
           initial="hidden"
           animate="show"
         >
           {posts.map((post) => (
-            <motion.div key={post.id} variants={itemVariants}>
+            <Motion.div key={post.id} variants={itemVariants}>
               <PostCard post={post} />
-            </motion.div>
+            </Motion.div>
           ))}
-        </motion.div>
+        </Motion.div>
       )}
 
       {totalPages > 1 && (
-        <div style={{ padding: '2rem 0', textAlign: 'center' }}>
-          <button 
-            onClick={() => setPage(p => p + 1)} 
-            disabled={page >= totalPages - 1}
-            style={{ color: 'var(--accent)' }}
+        <div className="paging-row">
+          <button
+            className="text-button"
+            onClick={() => {
+              setLoading(true);
+              setError('');
+              setPage((p) => p + 1);
+            }}
+            disabled={page >= totalPages - 1 || loading}
+            type="button"
           >
-            Load More
+            {page >= totalPages - 1 ? 'No more posts' : loading ? 'Loading…' : 'Load more'}
           </button>
         </div>
       )}
-    </div>
+    </section>
   );
 };
 

@@ -23,7 +23,7 @@ services:
     build: ./backend
     container_name: forum-backend
     ports:
-      - "127.0.0.1:8080:8080"
+      - "0.0.0.0:8091:8082"
     environment:
       SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/forum_db?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
       SPRING_DATASOURCE_USERNAME: forum_user
@@ -38,7 +38,7 @@ services:
     build: ./frontend
     container_name: forum-frontend
     ports:
-      - "127.0.0.1:3000:80"
+      - "0.0.0.0:3002:80"
     depends_on:
       - backend
 
